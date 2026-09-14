@@ -1,0 +1,67 @@
+Log file: /secdmp/benchmarks/performance/embench/../../../results/performance_evaluation/embench/Imp/proteus_dmp.txt
+
+
+Supplied arguments
+==================
+--benchdir            : src
+--builddir            : bd
+--logdir              : ../../../results/performance_evaluation/embench/Imp
+--logfilename         : proteus_dmp
+--baselinedir         : baseline-data
+--absolute            : True
+--output-format       : None
+--json-comma          : False
+--target-module       : run_proteus
+--timeout             : 5400
+--file-extension      : None
+--gsf                 : 1
+--cpu-mhz             : 16
+
+Benchmarks
+==========
+aha-mont64
+crc32
+depthconv
+edn
+huffbench
+matmult-int
+md5sum
+nettle-aes
+nettle-sha256
+nsichneu
+picojpeg
+qrduino
+sglib-combined
+slre
+statemate
+tarfind
+ud
+wikisort
+xgboost
+
+Benchmark           Speed
+---------           -----
+aha-mont64       6,687,692
+crc32            20,192,102
+depthconv        8,921,830
+edn              11,115,857
+huffbench        6,095,632
+matmult-int      8,223,582
+md5sum           3,628,280
+nettle-aes       14,278,939
+nettle-sha256    6,991,525
+nsichneu         4,267,988
+picojpeg         9,960,190
+qrduino          6,945,300
+sglib-combined   12,521,381
+slre             7,610,669
+statemate        8,338,582
+tarfind          4,578,536
+ud               9,534,050
+wikisort         3,953,809
+xgboost          12,159,756
+---------           -----
+Geometric mean   7,922,321
+Geometric SD            1.56
+Geometric range  7,265,898
+All benchmarks run successfully

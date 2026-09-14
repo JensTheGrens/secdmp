@@ -1,0 +1,28 @@
+Starting timing search up to 16000 ps...
+Timing failed (7000 ps)
+Timing failed (8000 ps)
+Timing failed (9000 ps)
+Timing failed (10000 ps)
+Timing failed (11000 ps)
+Timing failed (12000 ps)
+Area = 688922.18 µm² = 0.6889 mm²
+Timing met: 13000 ps = 13.0 ns = 76.92 MHz
+Timing failed (12100 ps)
+Timing failed (12200 ps)
+Timing failed (12300 ps)
+Timing failed (12400 ps)
+Area = 690318.41 µm² = 0.6903 mm²
+Timing met: 12500 ps = 12.5 ns = 80.00 MHz
+Timing failed (12410 ps)
+Timing failed (12420 ps)
+Area = 691010.81 µm² = 0.6910 mm²
+Timing met: 12430 ps = 12.43 ns = 80.45 MHz
+Timing failed (12421 ps)
+Timing failed (12422 ps)
+Timing failed (12423 ps)
+Timing failed (12424 ps)
+Timing failed (12425 ps)
+Timing failed (12426 ps)
+Timing failed (12427 ps)
+Timing failed (12428 ps)
+Timing failed (12429 ps)

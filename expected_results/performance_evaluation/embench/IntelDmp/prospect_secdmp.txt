@@ -1,0 +1,67 @@
+Log file: /secdmp/benchmarks/performance/embench/../../../results/performance_evaluation/embench/IntelDmp/prospect_secdmp.txt
+
+
+Supplied arguments
+==================
+--benchdir            : src
+--builddir            : bd
+--logdir              : ../../../results/performance_evaluation/embench/IntelDmp
+--logfilename         : prospect_secdmp
+--baselinedir         : baseline-data
+--absolute            : True
+--output-format       : None
+--json-comma          : False
+--target-module       : run_proteus
+--timeout             : 5400
+--file-extension      : None
+--gsf                 : 1
+--cpu-mhz             : 16
+
+Benchmarks
+==========
+aha-mont64
+crc32
+depthconv
+edn
+huffbench
+matmult-int
+md5sum
+nettle-aes
+nettle-sha256
+nsichneu
+picojpeg
+qrduino
+sglib-combined
+slre
+statemate
+tarfind
+ud
+wikisort
+xgboost
+
+Benchmark           Speed
+---------           -----
+aha-mont64       6,687,692
+crc32            20,022,268
+depthconv        8,921,830
+edn              11,117,480
+huffbench        6,055,573
+matmult-int      8,224,436
+md5sum           3,637,202
+nettle-aes       14,294,132
+nettle-sha256    6,999,955
+nsichneu         4,266,754
+picojpeg         9,930,120
+qrduino          6,955,581
+sglib-combined   12,557,098
+slre             7,599,115
+statemate        7,895,722
+tarfind          4,578,033
+ud               9,551,904
+wikisort         3,983,470
+xgboost          12,100,942
+---------           -----
+Geometric mean   7,897,028
+Geometric SD            1.56
+Geometric range  7,211,622
+All benchmarks run successfully

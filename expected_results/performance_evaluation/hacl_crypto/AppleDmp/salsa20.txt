@@ -1,0 +1,8 @@
+salsa20:
+proteus_dmp               381949  
+permanent_disabling       393072   (+2.9%)                                 
+selective_disabling       393084   (+2.9%)                                 
+partitioning              400107   (+4.8%)                                 
+secdmp                    400114   (+4.8%)                                 
+prospect                  400303   (+4.8%)                                 
+prospect_secdmp           400303   (+4.8%)                                 

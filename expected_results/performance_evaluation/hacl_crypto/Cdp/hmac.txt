@@ -1,0 +1,8 @@
+hmac:
+proteus_dmp               370788  
+permanent_disabling       375034   (+1.1%)                                 
+selective_disabling       375041   (+1.1%)                                 
+partitioning              372909   (+0.6%)                                 
+secdmp                    372020   (+0.3%)                                 
+prospect                  371646   (+0.2%)                                 
+prospect_secdmp           370593   (-0.1%)                                 

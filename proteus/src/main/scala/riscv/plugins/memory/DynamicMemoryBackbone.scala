@@ -1,0 +1,259 @@
+package riscv.plugins.memory
+
+import riscv._
+import spinal.core._
+import spinal.lib._
+import spinal.core.sim._
+
+import scala.collection.mutable
+
+class DynamicMemoryBackbone(implicit config: Config) extends MemoryBackbone with Resettable {
+
+  private var activeFlush: Bool = null
+  private var unifiedInternalDBus: Stream[MemBus] = null
+
+  override def build(): Unit = {
+    pipeline plug new Area {
+      val activeFlushCopy = Bool()
+      activeFlush = activeFlushCopy
+      activeFlush := False
+    }
+  }
+
+  override def finish(): Unit = {
+    super.finish()
+
+    pipeline plug new Area {
+      unifiedInternalDBus =
+        Stream(MemBus(config.internalDBusConfig)).simPublic.setName("unifiedInternalDBus")
+
+      unifiedInternalDBus.cmd.valid := False
+      unifiedInternalDBus.cmd.address.assignDontCare()
+      if (config.internalDBusConfig.includePcWire) {
+        unifiedInternalDBus.cmd.pc.assignDontCare()
+      }
+      unifiedInternalDBus.cmd.id.assignDontCare()
+      unifiedInternalDBus.cmd.write := False
+      unifiedInternalDBus.cmd.wdata.assignDontCare()
+      unifiedInternalDBus.cmd.wmask.assignDontCare()
+
+      unifiedInternalDBus.rsp.ready := False
+
+      private case class IdMeta() extends Bundle {
+        val stageIndex = UInt(config.internalDBusConfig.idWidth bits)
+        val cmdSent = Bool()
+        val rspReceived = Bool()
+        val invalidated = Bool()
+      }
+
+      private val currentlyInserting = Flow(IdMeta())
+      currentlyInserting.valid := False
+      currentlyInserting.payload.assignDontCare()
+
+      private val sameCycleReturn = Bool()
+      sameCycleReturn := False
+
+      private val movingToCmdBuffer = Flow(UInt(config.internalDBusConfig.idWidth bits))
+      movingToCmdBuffer.setIdle()
+
+      private val idBufferSize = UInt(config.internalDBusConfig.idWidth bits).maxValue.intValue()
+
+      private val busId2StageIndex = Vec.fill(idBufferSize + 1)(RegInit(IdMeta().getZero))
+
+      // calculate the nextId
+      val nextId: UInt = RegInit(UInt(config.internalDBusConfig.idWidth bits).getZero)
+      val calculateNextId: Bool = Bool()
+      calculateNextId := False
+      val hasFreeSlot: Bool = Bool()
+      hasFreeSlot := False
+      val availableId: UInt = U(0, config.internalDBusConfig.idWidth bits)
+      for (i <- idBufferSize downto 0) {
+        when(!busId2StageIndex(i).cmdSent && !(nextId === i && calculateNextId)) {
+          availableId := i
+          hasFreeSlot := True
+        }
+      }
+      when(calculateNextId || busId2StageIndex(nextId).cmdSent) {
+        when(hasFreeSlot) {
+          nextId := availableId
+        }
+      }
+
+      for (i <- 0 until idBufferSize + 1) {
+        when(activeFlush) {
+          busId2StageIndex(i).invalidated := True
+        }
+      }
+      // when putting a cmd on external, add stage index with counter.next
+      // when pipeline is invalidated, invalidate all entries in here
+      // when getting a response, if it's invalid, throw it away
+      // when counter is full (all entries are waiting), don't accept any cmd
+
+      // this makes sure that once we assert a command, it stays on the bus until it's acknowledged
+      // even if the pipeline is flushed or a command with a lower index comes in
+      private val cmdBuffer = Reg(Flow(MemBusCmd(config.internalDBusConfig)))
+      private val currentlySendingIndex = Reg(Flow(UInt(config.internalDBusConfig.idWidth bits)))
+
+      private val fullDBusCmds = internalReadDBuses.zipWithIndex.map {
+        case (internalReadDBus, index) =>
+          val fullReadDBusCmd = Stream(MemBusCmd(config.internalDBusConfig))
+          fullReadDBusCmd.valid := internalReadDBus.cmd.valid
+          fullReadDBusCmd.id := internalReadDBus.cmd.id
+          internalReadDBus.cmd.ready := False
+          fullReadDBusCmd.write := False
+          fullReadDBusCmd.wmask.assignDontCare()
+          fullReadDBusCmd.wdata.assignDontCare()
+          fullReadDBusCmd.address := internalReadDBus.cmd.address
+          if (config.internalDBusConfig.includePcWire) {
+            fullReadDBusCmd.pc := internalReadDBus.cmd.pc
+          }
+
+          val busValid = Bool()
+          busValid := False
+
+          // forwarding the ready signal for the command:
+          // 1. if the command is being moved to the buffer
+          // 2. if the command was sent immediately, not from the buffer
+          when(
+            !activeFlush && internalReadDBus.cmd.valid &&
+              (
+                (movingToCmdBuffer.valid && movingToCmdBuffer.payload === index) ||
+                  (!cmdBuffer.valid && currentlyInserting.payload.stageIndex === index && currentlyInserting.valid)
+              )
+          ) {
+            internalReadDBus.cmd.ready := True
+          }
+
+          // only set valid bit for the corresponding load bus
+          when(unifiedInternalDBus.rsp.valid) {
+            when(
+              currentlyInserting.valid && currentlyInserting.stageIndex === index && nextId === unifiedInternalDBus.rsp.id
+            ) {
+              sameCycleReturn := True
+              busId2StageIndex(unifiedInternalDBus.rsp.id).rspReceived := True
+              busId2StageIndex(unifiedInternalDBus.rsp.id).cmdSent := False // free up slot
+              // do not forward if the command was sent from the buffer and it's already invalidated
+              busValid := !activeFlush && !(cmdBuffer.valid && busId2StageIndex(nextId).invalidated)
+            }
+            // TODO: cmdSend could become problematic or it will always waste a cycle (first false for a cycle, then
+            // new load can start)
+            when(
+              busId2StageIndex(unifiedInternalDBus.rsp.id).cmdSent && busId2StageIndex(
+                unifiedInternalDBus.rsp.id
+              ).stageIndex === index
+            ) {
+              busId2StageIndex(unifiedInternalDBus.rsp.id).rspReceived := True
+              busId2StageIndex(unifiedInternalDBus.rsp.id).cmdSent := False // free up slot
+              busValid := !busId2StageIndex(unifiedInternalDBus.rsp.id).invalidated && !activeFlush
+            }
+          }
+
+          internalReadDBus.rsp.valid := busValid
+          internalReadDBus.rsp.payload := unifiedInternalDBus.rsp.payload
+
+          fullReadDBusCmd
+      }
+
+      // check whether the correct load bus is ready to receive
+      when(unifiedInternalDBus.rsp.valid) {
+        unifiedInternalDBus.rsp.ready := internalReadDBuses(
+          busId2StageIndex(unifiedInternalDBus.rsp.id).stageIndex
+        ).rsp.ready
+      }
+
+      // TODO: is it possible to do the following with an arbiter instead of this manual mess?
+
+      private val cmds = fullDBusCmds :+ internalWriteDBus.cmd
+
+      internalWriteDBus.cmd.ready := unifiedInternalDBus.cmd.ready && unifiedInternalDBus.cmd.write
+
+      private var context = when(cmdBuffer.valid) {
+        unifiedInternalDBus.cmd.payload := cmdBuffer.payload
+        unifiedInternalDBus.cmd.valid := True
+        when(unifiedInternalDBus.cmd.ready) {
+          currentlySendingIndex.setIdle()
+          cmdBuffer.setIdle()
+          when(!cmdBuffer.write) {
+            busId2StageIndex(nextId).stageIndex := currentlySendingIndex.payload
+            when(!sameCycleReturn) {
+              busId2StageIndex(nextId).cmdSent := True
+              calculateNextId := True
+            }
+            busId2StageIndex(nextId).rspReceived := False
+            currentlyInserting.valid := True
+            currentlyInserting.payload.stageIndex := currentlySendingIndex.payload
+          }
+        }
+      }
+
+      cmds.zipWithIndex.foreach { case (cmd, index) =>
+        context =
+          context.elsewhen(cmd.valid && ((!busId2StageIndex(nextId).cmdSent) || cmd.write)) {
+            unifiedInternalDBus.cmd.valid := True
+            unifiedInternalDBus.cmd.address := cmd.address
+            if (config.internalDBusConfig.includePcWire) {
+              unifiedInternalDBus.cmd.pc := cmd.pc
+            }
+            unifiedInternalDBus.cmd.id := nextId
+            unifiedInternalDBus.cmd.write := cmd.write
+            unifiedInternalDBus.cmd.wdata := cmd.wdata
+            unifiedInternalDBus.cmd.wmask := cmd.wmask
+            when(!cmd.write) {
+              busId2StageIndex(nextId).invalidated := activeFlush
+            }
+            when(unifiedInternalDBus.cmd.ready) {
+              currentlySendingIndex.setIdle()
+              cmdBuffer.setIdle()
+              when(!cmd.write) {
+                busId2StageIndex(nextId).stageIndex := U(index).resized
+                when(!sameCycleReturn) {
+                  busId2StageIndex(nextId).cmdSent := True
+                  calculateNextId := True
+                }
+                busId2StageIndex(nextId).rspReceived := False
+                currentlyInserting.valid := True
+                currentlyInserting.payload.stageIndex := index
+              }
+            } otherwise {
+              movingToCmdBuffer.push(index)
+              cmdBuffer.push(unifiedInternalDBus.cmd)
+              currentlySendingIndex.push(index)
+            }
+          }
+      }
+    }
+
+    setupExternalDBus(unifiedInternalDBus)
+  }
+
+  override def createInternalDBus(
+      readStages: Seq[Stage],
+      writeStage: Stage
+  ): (Seq[MemBus], MemBus) = {
+    assert(!readStages.contains(writeStage))
+
+    internalReadDBuses = readStages.map(readStage => {
+      val readArea = readStage plug new Area {
+        val dbus = master(new MemBus(config.internalReadDBusConfig))
+      }
+      readArea.dbus
+    })
+
+    writeStage plug new Area {
+      internalWriteDBus = master(new MemBus(config.internalDBusConfig))
+    }
+
+    pipeline plug {
+      internalWriteDBus.rsp.valid := False
+    }
+
+    internalReadDBusStages = readStages
+    internalWriteDBusStage = writeStage
+
+    (internalReadDBuses, internalWriteDBus)
+  }
+
+  override def pipelineReset(): Unit = {
+    activeFlush := True
+  }
+}

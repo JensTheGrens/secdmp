@@ -1,0 +1,6 @@
+proteus_dmp: 1136132 cycles
+permanent_disabling: 1137399 cycles
+selective_disabling: 1136132 cycles
+secdmp: 1136132 cycles
+prospect: 1135101 cycles
+prospect_secdmp: 1135101 cycles

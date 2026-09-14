@@ -1,0 +1,12 @@
+name: secdmp
+
+services:
+  secdmp:
+    build: .
+    image: secdmp:latest
+    pull_policy: build
+    container_name: secdmp
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./results:/secdmp/results

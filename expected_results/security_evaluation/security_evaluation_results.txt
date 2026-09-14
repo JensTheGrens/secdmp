@@ -1,0 +1,115 @@
+Part 1: DMP security tests:
+                                                    Secure                 
+                                    AppleDmp  IntelDmp    Cdp       Imp    
+Results for proteus_dmp:
+imp_leak                               ✅        ✅        ✅        ❌    
+augury_poc                             ✅        ❌        ✅        ✅    
+gofetch_poc                            ❌        ✅        ❌        ✅    
+peek_a_walk                            ✅        ❌        ✅        ✅    
+dmp_spectre                            ❌        ✅        ❌        ✅    
+recursion                              ✅        ✅        ❌        ✅    
+load_secret                            ❌        ❌        ❌        ❌    
+same_cache_block                       ❌        ✅        ❌        ✅    
+transient_load                         ❌        ❌        ❌        ❌    
+
+Results for permanent_disabling:
+imp_leak                               ✅        ✅        ✅        ✅    
+augury_poc                             ✅        ✅        ✅        ✅    
+gofetch_poc                            ✅        ✅        ✅        ✅    
+peek_a_walk                            ✅        ✅        ✅        ✅    
+dmp_spectre                            ✅        ✅        ✅        ✅    
+recursion                              ✅        ✅        ✅        ✅    
+load_secret                            ✅        ✅        ✅        ✅    
+same_cache_block                       ✅        ✅        ✅        ✅    
+transient_load                         ✅        ✅        ✅        ✅    
+
+Results for selective_disabling:
+imp_leak                               ✅        ✅        ✅        ❌    
+augury_poc                             ✅        ❌        ✅        ✅    
+gofetch_poc                            ✅        ✅        ✅        ✅    
+peek_a_walk                            ✅        ❌        ✅        ✅    
+dmp_spectre                            ❌        ✅        ❌        ✅    
+recursion                              ✅        ✅        ❌        ✅    
+load_secret                            ✅        ✅        ✅        ✅    
+same_cache_block                       ❌        ✅        ❌        ✅    
+transient_load                         ❌        ❌        ❌        ❌    
+
+Results for secdmp:
+imp_leak                               ✅        ✅        ✅        ✅    
+augury_poc                             ✅        ✅        ✅        ✅    
+gofetch_poc                            ✅        ✅        ✅        ✅    
+peek_a_walk                            ✅        ✅        ✅        ✅    
+dmp_spectre                            ✅        ✅        ✅        ✅    
+recursion                              ✅        ✅        ✅        ✅    
+load_secret                            ✅        ✅        ✅        ✅    
+same_cache_block                       ✅        ✅        ✅        ✅    
+transient_load                         ✅        ✅        ✅        ✅    
+
+Results for prospect:
+imp_leak                               ✅        ✅        ✅        ❌    
+augury_poc                             ✅        ❌        ✅        ✅    
+gofetch_poc                            ❌        ✅        ❌        ✅    
+peek_a_walk                            ✅        ❌        ✅        ✅    
+dmp_spectre                            ❌        ✅        ❌        ✅    
+recursion                              ✅        ✅        ❌        ✅    
+load_secret                            ❌        ❌        ❌        ❌    
+same_cache_block                       ❌        ✅        ❌        ✅    
+transient_load                         ❌        ❌        ❌        ❌    
+
+Results for prospect_secdmp:
+imp_leak                               ✅        ✅        ✅        ✅    
+augury_poc                             ✅        ✅        ✅        ✅    
+gofetch_poc                            ✅        ✅        ✅        ✅    
+peek_a_walk                            ✅        ✅        ✅        ✅    
+dmp_spectre                            ✅        ✅        ✅        ✅    
+recursion                              ✅        ✅        ✅        ✅    
+load_secret                            ✅        ✅        ✅        ✅    
+same_cache_block                       ✅        ✅        ✅        ✅    
+transient_load                         ✅        ✅        ✅        ✅    
+
+
+Part 2: Spectre security tests:
+                                                    Secure                 
+                                    AppleDmp  IntelDmp    Cdp       Imp    
+Results for proteus_dmp:
+pht_load                               ❌        ❌        ❌        ❌    
+pht_store                              ❌        ❌        ❌        ❌    
+pht_branch                             ❌        ❌        ❌        ❌    
+pht_jump                               ❌        ❌        ❌        ❌    
+pht_division                           ❌        ❌        ❌        ❌    
+
+Results for permanent_disabling:
+pht_load                               ❌        ❌        ❌        ❌    
+pht_store                              ❌        ❌        ❌        ❌    
+pht_branch                             ❌        ❌        ❌        ❌    
+pht_jump                               ❌        ❌        ❌        ❌    
+pht_division                           ❌        ❌        ❌        ❌    
+
+Results for selective_disabling:
+pht_load                               ❌        ❌        ❌        ❌    
+pht_store                              ❌        ❌        ❌        ❌    
+pht_branch                             ❌        ❌        ❌        ❌    
+pht_jump                               ❌        ❌        ❌        ❌    
+pht_division                           ❌        ❌        ❌        ❌    
+
+Results for secdmp:
+pht_load                               ❌        ❌        ❌        ❌    
+pht_store                              ❌        ❌        ❌        ❌    
+pht_branch                             ❌        ❌        ❌        ❌    
+pht_jump                               ❌        ❌        ❌        ❌    
+pht_division                           ❌        ❌        ❌        ❌    
+
+Results for prospect:
+pht_load                               ❌        ❌        ❌        ❌    
+pht_store                              ❌        ❌        ❌        ❌    
+pht_branch                             ❌        ❌        ❌        ❌    
+pht_jump                               ❌        ❌        ❌        ❌    
+pht_division                           ❌        ❌        ❌        ❌    
+
+Results for prospect_secdmp:
+pht_load                               ✅        ✅        ✅        ✅    
+pht_store                              ✅        ✅        ✅        ✅    
+pht_branch                             ✅        ✅        ✅        ✅    
+pht_jump                               ✅        ✅        ✅        ✅    
+pht_division                           ✅        ✅        ✅        ✅    
+

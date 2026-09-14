@@ -1,0 +1,17 @@
+\begin{table}[t]
+  \centering
+  \caption{Results of the hardware evaluation.}
+  \label{tab:hardware-evaluation}
+  \begin{tabular}{l c c c c}\toprule
+    \multirow{2}{*}{Defense} & \multicolumn{4}{c}{Area (\si{\milli\meter\squared})} \\
+  \cmidrule(lr){2-5}
+     & Apple DMP & Intel DMP & CDP & IMP \\ \midrule
+    Proteus & 0.6723 & 0.6723 & 0.6723 & 0.6723 \\
+    Proteus+DMP & 0.6858 & 0.7064 & 0.6906 & 0.8717 \\
+    Selective Disabling & 0.6861 & 0.7079 & 0.6910 & 0.8735 \\
+    \secdmp{} & 0.6880 & 0.7102 & 0.6929 & 0.8758 \\
+    \prospect{} & 0.7022 & 0.7228 & 0.7070 & 0.8881 \\
+    \prospect{}+\secdmp{} & 0.7031 & 0.7253 & 0.7080 & 0.8908 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

@@ -1,0 +1,37 @@
+name: CI checks
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Install native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -yqq install git lsb-release sudo vim gnupg openjdk-17-jdk verilator gcc-riscv64-unknown-elf curl make gcc g++ libz-dev
+      - name: Install sbt
+        run: |
+          sudo apt-get install apt-transport-https gnupg curl -yqq
+          echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+          sudo apt-get update -yqq
+          sudo apt-get install sbt -yqq
+      - name: Install ecosystem for simple tests
+        run: git clone --depth 1 --recurse-submodules --single-branch https://github.com/proteus-core/ecosystem.git
+      - name: Run Scalafmt
+        run: sbt scalafmtCheck
+      - name: 32-bit in-order pipeline riscv-tests
+        run: make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Static ISA=RV32I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 -C ecosystem/functional-tests
+      - name: 32-bit out-of-order pipeline riscv-tests
+        run: make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Dynamic ISA=RV32I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 -C ecosystem/functional-tests
+      - name: Clean up 32-bit tests
+        run: rm -rf ecosystem/functional-tests/build
+      - name: 64-bit in-order pipeline riscv-tests
+        run: make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Static ISA=RV64I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 64BIT=1 -C ecosystem/functional-tests
+      - name: 64-bit out-of-order pipeline riscv-tests
+        run: make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Dynamic ISA=RV64I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 64BIT=1 -C ecosystem/functional-tests

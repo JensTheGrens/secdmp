@@ -1,0 +1,17 @@
+.idea/
+.vscode/
+/*.v
+/*.bin
+/project/*
+!/project/plugins.sbt
+/simWorkspace/
+/target/
+/tmp/
+/tools/
+/verbose.log
+*~
+*.swp
+*.vcd
+.kdev4/
+*.kdev4
+.bsp

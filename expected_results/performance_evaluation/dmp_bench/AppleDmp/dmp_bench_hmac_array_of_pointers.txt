@@ -1,0 +1,179 @@
+Summary:
+                          25% W              50% W              75% W              90% W             
+proteus_dmp               260807             132464             267681             673305            
+permanent_disabling       291800 (+11.9%)    161375 (+21.8%)    352386 (+31.6%)    925428 (+37.4%)   
+selective_disabling       263836 (+1.2%)     133445 (+0.7%)     268767 (+0.4%)     674391 (+0.2%)    
+partitioning              264009 (+1.2%)     133685 (+0.9%)     269438 (+0.7%)     676592 (+0.5%)    
+secdmp                    264009 (+1.2%)     133685 (+0.9%)     269438 (+0.7%)     676592 (+0.5%)    
+prospect                  263831 (+1.2%)     133623 (+0.9%)     269376 (+0.6%)     676530 (+0.5%)    
+prospect_secdmp           263831 (+1.2%)     133623 (+0.9%)     269376 (+0.6%)     676530 (+0.5%)    
+
+Results:
+1. proteus_dmp with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[67692]
+Encrypt cycles:[193115]
+Total cycles  :[260807]
+
+2. proteus_dmp with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[67692]
+Encrypt cycles:[64772]
+Total cycles  :[132464]
+
+3. proteus_dmp with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[202934]
+Encrypt cycles:[64747]
+Total cycles  :[267681]
+
+4. proteus_dmp with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[608558]
+Encrypt cycles:[64747]
+Total cycles  :[673305]
+
+5. permanent_disabling with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[95599]
+Encrypt cycles:[196201]
+Total cycles  :[291800]
+
+6. permanent_disabling with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[95599]
+Encrypt cycles:[65776]
+Total cycles  :[161375]
+
+7. permanent_disabling with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[286644]
+Encrypt cycles:[65742]
+Total cycles  :[352386]
+
+8. permanent_disabling with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[859686]
+Encrypt cycles:[65742]
+Total cycles  :[925428]
+
+9. selective_disabling with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[67692]
+Encrypt cycles:[196144]
+Total cycles  :[263836]
+
+10. selective_disabling with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[67692]
+Encrypt cycles:[65753]
+Total cycles  :[133445]
+
+11. selective_disabling with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[202934]
+Encrypt cycles:[65833]
+Total cycles  :[268767]
+
+12. selective_disabling with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[608558]
+Encrypt cycles:[65833]
+Total cycles  :[674391]
+
+13. partitioning with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[196063]
+Total cycles  :[264009]
+
+14. partitioning with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[65739]
+Total cycles  :[133685]
+
+15. partitioning with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[203698]
+Encrypt cycles:[65740]
+Total cycles  :[269438]
+
+16. partitioning with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[610852]
+Encrypt cycles:[65740]
+Total cycles  :[676592]
+
+17. secdmp with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[196063]
+Total cycles  :[264009]
+
+18. secdmp with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[65739]
+Total cycles  :[133685]
+
+19. secdmp with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[203698]
+Encrypt cycles:[65740]
+Total cycles  :[269438]
+
+20. secdmp with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[610852]
+Encrypt cycles:[65740]
+Total cycles  :[676592]
+
+21. prospect with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[195885]
+Total cycles  :[263831]
+
+22. prospect with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[65677]
+Total cycles  :[133623]
+
+23. prospect with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[203698]
+Encrypt cycles:[65678]
+Total cycles  :[269376]
+
+24. prospect with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[610852]
+Encrypt cycles:[65678]
+Total cycles  :[676530]
+
+25. prospect_secdmp with work_p 25:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[195885]
+Total cycles  :[263831]
+
+26. prospect_secdmp with work_p 50:
+--------------------------------------------------------------------------------
+Work cycles   :[67946]
+Encrypt cycles:[65677]
+Total cycles  :[133623]
+
+27. prospect_secdmp with work_p 75:
+--------------------------------------------------------------------------------
+Work cycles   :[203698]
+Encrypt cycles:[65678]
+Total cycles  :[269376]
+
+28. prospect_secdmp with work_p 90:
+--------------------------------------------------------------------------------
+Work cycles   :[610852]
+Encrypt cycles:[65678]
+Total cycles  :[676530]
+

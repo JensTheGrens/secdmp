@@ -1,0 +1,12 @@
+*.fst
+*.bin
+*.elf
+*.o
+.venv
+benchmarks/security/spectre_tests/lib.s
+benchmarks/performance/hacl_crypto/hacl_primitives/*.s
+benchmarks/performance/hacl_crypto/hacl_primitives/*.a
+benchmarks/performance/hacl_crypto/annotated_hacl_primitives/*.s
+benchmarks/performance/hacl_crypto/annotated_hacl_primitives/*.a
+/results
+benchmarks/performance/coremark/coremark/build

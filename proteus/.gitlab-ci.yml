@@ -1,0 +1,40 @@
+image: ubuntu:noble
+
+default:
+  tags:
+    - high-cpu
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+  - apt-get update
+  # Install build dependencies
+  - apt-get -yqq install git lsb-release sudo vim gnupg openjdk-17-jdk verilator gcc-riscv64-unknown-elf curl make gcc g++ libz-dev
+  # Install dependencies needed for adding the sbt repo
+  - apt-get install apt-transport-https gnupg curl -yqq
+  # Add keyserver for SBT
+  - echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
+  - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+  # Install SBT
+  - apt-get update -yqq
+  - apt-get install sbt -yqq
+  # Clone ecosystem for functional tests
+  - git clone --depth 1 --recurse-submodules --single-branch https://github.com/proteus-core/ecosystem.git
+
+scalafmt:
+  script:
+    - sbt scalafmtCheck
+
+test:
+  script:
+    # Execute base RV32IM tests on the static pipeline
+    - make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Static ISA=RV32I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 -C ecosystem/functional-tests
+    # Execute base RV32IM tests on the dynamic pipeline
+    - make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Dynamic ISA=RV32I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 -C ecosystem/functional-tests
+    # Clean up 32-bit tests
+    - rm -rf ecosystem/functional-tests/build
+    # Execute base RV64IM tests on the static pipeline
+    - make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Static ISA=RV64I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 64BIT=1 -C ecosystem/functional-tests
+    # Execute base RV64IM tests on the dynamic pipeline
+    - make PROTEUS_DIR="$(pwd)" CORE=riscv.CoreExtMem PIPELINE=Dynamic ISA=RV64I -C ecosystem/simulation && make PROTEUS_DIR="$(pwd)" RISCV_PREFIX=riscv64-unknown-elf SIM_DIR="$(pwd)/ecosystem/simulation" BUILD_CORE=0 64BIT=1 -C ecosystem/functional-tests

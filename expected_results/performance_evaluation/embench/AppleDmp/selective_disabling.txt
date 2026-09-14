@@ -1,0 +1,67 @@
+Log file: /secdmp/benchmarks/performance/embench/../../../results/performance_evaluation/embench/AppleDmp/selective_disabling.txt
+
+
+Supplied arguments
+==================
+--benchdir            : src
+--builddir            : bd
+--logdir              : ../../../results/performance_evaluation/embench/AppleDmp
+--logfilename         : selective_disabling
+--baselinedir         : baseline-data
+--absolute            : True
+--output-format       : None
+--json-comma          : False
+--target-module       : run_proteus
+--timeout             : 5400
+--file-extension      : None
+--gsf                 : 1
+--cpu-mhz             : 16
+
+Benchmarks
+==========
+aha-mont64
+crc32
+depthconv
+edn
+huffbench
+matmult-int
+md5sum
+nettle-aes
+nettle-sha256
+nsichneu
+picojpeg
+qrduino
+sglib-combined
+slre
+statemate
+tarfind
+ud
+wikisort
+xgboost
+
+Benchmark           Speed
+---------           -----
+aha-mont64       6,687,692
+crc32            20,192,102
+depthconv        8,921,830
+edn              11,115,857
+huffbench        6,096,804
+matmult-int      8,223,582
+md5sum           3,620,160
+nettle-aes       14,278,939
+nettle-sha256    6,957,312
+nsichneu         4,267,988
+picojpeg         9,955,925
+qrduino          6,944,276
+sglib-combined   11,716,510
+slre             7,610,605
+statemate        8,338,582
+tarfind          4,578,650
+ud               9,533,916
+wikisort         3,956,291
+xgboost          12,160,827
+---------           -----
+Geometric mean   7,891,837
+Geometric SD            1.55
+Geometric range  7,183,192
+All benchmarks run successfully

@@ -1,0 +1,8 @@
+sha2:
+proteus_dmp               338976  
+permanent_disabling       339352   (+0.1%)                                 
+selective_disabling       339362   (+0.1%)                                 
+partitioning              339733   (+0.2%)                                 
+secdmp                    339741   (+0.2%)                                 
+prospect                  339625   (+0.2%)                                 
+prospect_secdmp           339625   (+0.2%)                                 
