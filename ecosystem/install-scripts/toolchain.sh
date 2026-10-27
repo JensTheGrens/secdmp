@@ -23,7 +23,7 @@ sed -i \
   .gitmodules
 
 ./configure --prefix="${ROOT_DIR}/gnu" --with-cmodel=medany --with-multilib-generator="rv32im_zicsr_zifencei_zicond-ilp32--;rv64im_zicsr_zifencei_zicond-lp64--" --enable-debug-info
-make -j$(nproc)
+make -j$(($(nproc) < 12 ? $(nproc) : 12))
 make clean
 echo "PATH=\"${ROOT_DIR}/gnu/bin:\$PATH\"" >> ~/.bashrc
 cd .. && rm -rf toolchain-tmp

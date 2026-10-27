@@ -84,10 +84,6 @@ docker start -ai secdmp
 
 The container keeps everything you build inside it, except the results of the evaluation and the generated figures and tables, which are written to the `results` directory both inside the container and on the host machine.
 
-### Note: Restricting Threads
-When running in Docker or Podman with restricted resources (e.g. a limit on the number of processes/threads), set the `OMP_NUM_THREADS` environment variable accordingly (e.g. `-e OMP_NUM_THREADS=16`).
-Many of the scripts use `nproc` to decide how many parallel jobs to start, and `nproc` reports all host cores if the environment variable is not set.
-
 ### Note: Preventing System Sleep
 When intending to replicate (parts of) the evaluation on a laptop, it is recommended to add the following in front of the `docker compose run` and `docker start` commands to prevent the system from going to sleep when leaving the evaluation running unattended:
 
