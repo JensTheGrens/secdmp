@@ -18,7 +18,7 @@ RUN git clone --branch 2026.01.01 --depth 1 --shallow-submodules https://github.
 ENV PATH=/opt/riscv/bin:$PATH
 
 # Hardware evaluation installation
-RUN git clone --recurse-submodules --depth 1 --shallow-submodules https://github.com/KULeuven-COSIC/eval-hd.git
+RUN git clone --recurse-submodules --depth 1 --shallow-submodules --branch v0.4 https://github.com/KULeuven-COSIC/eval-hd.git
 
 COPY ./ecosystem ./ecosystem
 COPY ./benchmarks ./benchmarks
