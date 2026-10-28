@@ -1,5 +1,6 @@
 # SecDMP: Provably Secure Data Memory-Dependent Prefetching
 This is the repository for the SecDMP paper published at NDSS 2027, containing all artifacts of the implementation and evaluation.
+The paper is available at [https://mici.hu/papers/sprengers27secdmp.pdf](https://mici.hu/papers/sprengers27secdmp.pdf).
 
 ```bibtex
 @inproceedings{sprengers27secdmp,
